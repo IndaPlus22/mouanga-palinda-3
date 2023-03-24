@@ -53,10 +53,12 @@ func WordCount(text string) map[string]int {
 		offsets[i] = int(math.Round(float64(i) / float64(threads) * float64(words_len)))
 	}
 
-	// update the map
+	// send the workers to work!
 	for i := 0; i < threads-1; i++ {
 		go count_partial(words, offsets[i], offsets[i+1], ch, wg)
 	}
+
+	// and send the last one too, he's special!
 	go func() {
 		go count_partial(words, offsets[threads-1], words_len, ch, wg)
 	}()
